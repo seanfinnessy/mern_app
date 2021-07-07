@@ -17,6 +17,9 @@ mongoose.connect(keys.mongoURI, {
 
 const app = express();
 
+// cookieSession is just processing incoming request, populating the req.session property, then passport accesses the data in req.session.
+// expressSession stores data in a outside "session store", uses a session Id to access this.
+// cookieSession stores data within the cookie. Has about 4 kB of memory, so were okay using this since were just using an Id.
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
