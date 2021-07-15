@@ -26,7 +26,7 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback",
-      proxy: true, // if request runs thru proxy (heroku proxy), change from http to https
+      proxy: true, // if request runs thru proxy (heroku proxy), change from http to https.
     },
     (accessToken, refreshToken, profile, done) => {
       // find the first record inside User collection with a googleId of profile.id.
