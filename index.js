@@ -2,10 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-const keys = require('../config/keys');
+const keys = require('./config/keys');
 
 // order of require statements MATTER! Passport.js uses User.js, so we must load User.js first.
-require('../models/User');
+require('./models/User');
 require('./services/passport');
 
 // connect to our mongoDB
