@@ -28,23 +28,21 @@ passport.use(
       callbackURL: "/auth/google/callback",
       proxy: true, // if request runs thru proxy (heroku proxy), change from http to https.
     },
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       // find the first record inside User collection with a googleId of profile.id.
       // the query returns a Promise (tool we use with JS to handle asynchronous code).
-      User.findOne({ googleId: profile.id }).then((existingUser) => {
-        if (existingUser) {
-          // we already have a record with the given profileId.
-          // call "done", 1st arg is error, 2nd arg is the user record.
-          done(null, existingUser);
-        } else {
-          // we dont have a user record with this id, make a new record.
-          // new model instance of a user, then save.
-          // then the database returns a Promise with a model instance of the user, call "done" with that more "fresh" user.
-          new User({ googleId: profile.id })
-            .save()
-            .then((user) => done(null, user));
-        }
-      });
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if (existingUser) {
+        // we already have a record with the given profileId.
+        // call "done", 1st arg is error, 2nd arg is the user record.
+        // can use return instead of if-else statement, to make it shorter.
+        return done(null, existingUser);
+      }
+      // we dont have a user record with this id, make a new record.
+      // new model instance of a user, then save.
+      // then the database returns a Promise with a model instance of the user, call "done" with that more "fresh" user.
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
