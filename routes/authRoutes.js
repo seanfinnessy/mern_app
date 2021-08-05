@@ -10,15 +10,20 @@ module.exports = (app) => {
   );
 
   // 2. Google sees in the url that we already have the code. Authenticate will see this and exchange it with an actual profile.
+  // response obj has a function attached called redirect. Redirect responds back to the browser and says 
+  // "I have this other route handler, /surveys so ill send you over there!"
   app.get(
     '/auth/google/callback', 
-    passport.authenticate('google')
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect('/surveys');
+    } 
   )
   
-  // logout() is a function that is automatically attached to the request object by passport. It takes the cookie and kils the id in it.
+  // logout() is a function that is automatically attached to the request object by passport. It takes the cookie and kills the id in it.
   app.get('/api/logout', (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect("/");
   });
 
   // req is incoming request, res is outgoing response
